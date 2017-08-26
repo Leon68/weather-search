@@ -1,5 +1,5 @@
 function ajaxWeather(){
-    $.get('//weixin.jirengu.com/weather/now?cityid=beijing')
+    $.get('//weixin.jirengu.com/weather')
         .done(success).fail(() => {
         alert('数据请求错误')
     })
