@@ -1,0 +1,114 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+ul {
+  list-style: none; }
+
+a {
+  tex-direction: none; }
+
+#container {
+  display: flex;
+  align-items: stretch;
+  height: 18000px; }
+  #container main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 920px;
+    width: 28%;
+    position: fixed;
+    margin-top: 6px;
+    border-radius: 6px;
+    background-image: linear-gradient(to bottom, rgba(255, 244, 253, 0.65), rgba(85, 73, 249, 0.16)), url("../images/weather.jpg");
+    background-size: cover; }
+    #container main #city {
+      position: absolute;
+      right: 1vw;
+      top: 3vw; }
+    #container main #inp-city {
+      line-height: 2em;
+      font-size: 1.5em;
+      border: none;
+      background-color: rgba(111, 7, 2, 0.08);
+      border-radius: 6px;
+      outline: none;
+      color: #fff;
+      text-align: center;
+      background: #f7fbfc;
+      background: -moz-linear-gradient(top, #f7fbfc 0%, #d9edf2 40%, #add9e4 100%);
+      background: -webkit-linear-gradient(top, #f7fbfc 0%, #d9edf2 40%, #add9e4 100%);
+      background: linear-gradient(to bottom, #f7fbfc 0%, #d9edf2 40%, #add9e4 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fbfc', endColorstr='#add9e4',GradientType=0 ); }
+    #container main #today-weather {
+      display: flex;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      width: 20vw;
+      height: 20vw;
+      border-right: 4px solid rgba(45, 38, 121, 0.27);
+      border-bottom: 4px solid #d7dee3;
+      border-radius: 50%;
+      font-size: 1.5rem; }
+      #container main #today-weather .today {
+        width: 12vw;
+        height: 12vw;
+        border: 20px solid rgba(2, 6, 7, 0.12);
+        border-radius: 50%;
+        text-align: center; }
+        #container main #today-weather .today img {
+          width: 60%; }
+      #container main #today-weather ul li {
+        color: #3c7090;
+        width: 10vw; }
+      #container main #today-weather ul li p {
+        display: inline-block;
+        margin-right: 4px;
+        width: 3.5vw;
+        height: 3.5vw;
+        border: 4px solid rgba(2, 6, 7, 0.05);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 3.5vw;
+        background: #f6f8f9;
+        background: -moz-linear-gradient(top, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: -webkit-linear-gradient(top, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: linear-gradient(to bottom, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', endColorstr='#f5f7f9',GradientType=0 ); }
+      #container main #today-weather ul .wind-direction {
+        position: absolute;
+        top: 3vh;
+        right: -6vw; }
+      #container main #today-weather ul .wind-scale {
+        position: absolute;
+        top: 13vh;
+        right: -8vw; }
+      #container main #today-weather ul .quality {
+        position: absolute;
+        top: 23vh;
+        right: -8vw; }
+      #container main #today-weather ul .humidity {
+        position: absolute;
+        top: 32vh;
+        right: -5vw; }
+    #container main #sugestion p {
+      padding: 6px 40px; }
+    #container main #week-weather {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      align-self: center; }
+      #container main #week-weather li {
+        width: 16%;
+        padding: 10px 6px;
+        border-radius: 4px;
+        background-color: rgba(5, 41, 113, 0.44); }
+        #container main #week-weather li img {
+          width: 100%; }
+
+/*# sourceMappingURL=index.css.map */

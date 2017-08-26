@@ -1,0 +1,23 @@
+{
+  "name": "weather-search",
+  "version": "1.0.0",
+  "description": "天气查询页面",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leon68/weather-search.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leon68/weather-search/issues"
+  },
+  "homepage": "https://github.com/Leon68/weather-search#readme",
+  "devDependencies": {
+    "jquery": "^3.2.1"
+  }
+}
