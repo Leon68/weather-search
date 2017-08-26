@@ -1,11 +1,15 @@
 function ajaxWeather(){
-    $.get('//weixin.jirengu.com/weather')
+    $.get('//weixin.jirengu.com/weather/now?cityid=beijing')
         .done(success).fail(() => {
         alert('数据请求错误')
     })
 }
 function success(data){
     console.log(data)
+    if (data.status === 'error') {
+        alert(data.msg)
+        return
+    }
     let $windScole = $('.wind-scale')
     let $windDirection = $('.wind-direction')
     let $quality = $('.quality')
@@ -51,4 +55,3 @@ function inpCity(){
     })
 }
 ajaxWeather()
-inpCity()
