@@ -29,9 +29,6 @@ a {
 
 }
 #container {
-  display: flex;
-  align-items: stretch;
-  height: 18000px;
   main {
     display: flex;
     flex-direction: column;
@@ -140,6 +137,9 @@ a {
     }
   }
   aside {
+    margin-left: 28vw;
+    border: 1px solid red;
+
 
 
   }

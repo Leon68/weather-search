@@ -51,7 +51,26 @@ function inpCity(){
                         alert('请检查输入是否正确')
                     })
                 })
+            ajaxImages()
         }
     })
 }
 ajaxWeather()
+
+function ajaxImages(){
+    let $inpCity = $('#inp-city')
+    let $caterImages = $('#cater-images')
+    let $inpCityVal = $inpCity.val() ? $inpCity.val() : 'city'
+    console.log($inpCityVal)
+    $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:20`)
+        .done((data) => {
+            console.log(data)
+            $caterImages.html('')
+            for (let i = 0;i< 20 ;i++){
+                $caterImages.html($caterImages.html() + `<img src='${data.hits[i].webformatURL}'>`)
+            }
+        })
+}
+function caterLayout(){
+
+}
