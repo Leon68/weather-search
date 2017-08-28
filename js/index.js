@@ -1,10 +1,10 @@
 function ajaxWeather(){
     $.get('//weixin.jirengu.com/weather')
-        .done(success).fail(() => {
+        .done(weather).fail(() => {
         alert('数据请求错误')
     })
 }
-function success(data){
+function weather(data){
     console.log(data)
     if (data.status === 'error') {
         alert(data.msg)
@@ -34,43 +34,45 @@ function success(data){
         let weekCodeImg = `//weixin.jirengu.com/images/weather/code/${data.weather[0].future[i].code1}.png`
         $weekWeather.html($weekWeather.html() + `<li><img src=${weekCodeImg}><p>${data.weather[0].future[i].text}${data.weather[0].future[i].low}°~${data.weather[0].future[i].high}°</p><p>${data.weather[0].future[i].day}${data.weather[0].future[i].date}</p></li>`)
     }
-    inpCity()
 }
 function inpCity(){
     let $inpCity = $('#inp-city')
     $inpCity.on('keypress',function(event){
         if(event.keyCode == '13'){
+            ajaxImages()
             $.get(`//weixin.jirengu.com/weather/cityid?location=${$inpCity.val()}`)
                 .done((id) => {
                     console.log(id)
                     $.get(`//weixin.jirengu.com/weather/now?cityid=${id.results[0].id}`)
-                        .done((weather) => {
+                        .done((data) => {
                             $inpCity.val('')
-                            success(weather)
+                            weather(data)
                         }).fail(() => {
                         alert('请检查输入是否正确')
                     })
                 })
-            ajaxImages()
         }
     })
 }
-ajaxWeather()
 
 function ajaxImages(){
     let $inpCity = $('#inp-city')
-    let $caterImages = $('#cater-images')
+    let $caterImages = $('aside .cater-images')
     let $inpCityVal = $inpCity.val() ? $inpCity.val() : 'city'
-    console.log($inpCityVal)
     $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:20`)
-        .done((data) => {
+        .done(function(data){
             console.log(data)
+            var a = $caterImages.text()
             $caterImages.html('')
             for (let i = 0;i< 20 ;i++){
                 $caterImages.html($caterImages.html() + `<img src='${data.hits[i].webformatURL}'>`)
             }
         })
 }
+
+ajaxWeather()
+ajaxImages()
+inpCity()
 function caterLayout(){
 
 }
