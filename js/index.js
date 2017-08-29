@@ -57,22 +57,46 @@ function inpCity(){
 
 function ajaxImages(){
     let $inpCity = $('#inp-city')
-    let $caterImages = $('aside .cater-images')
     let $inpCityVal = $inpCity.val() ? $inpCity.val() : 'city'
-    $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:20`)
-        .done(function(data){
-            console.log(data)
-            var a = $caterImages.text()
-            $caterImages.html('')
-            for (let i = 0;i< 20 ;i++){
-                $caterImages.html($caterImages.html() + `<img src='${data.hits[i].webformatURL}'>`)
-            }
-        })
+    $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:10`)
+        .done(caterLayout)
 }
 
 ajaxWeather()
 ajaxImages()
 inpCity()
-function caterLayout(){
-
+caterLayout()
+function caterLayout(data){
+    let $aside = $('aside')
+    let asideWidth = $aside.width()
+    let basicHeight = 200
+    let imgArray = []
+    let rowTotalWidth = 0
+    console.log(asideWidth)
+    data.hits.forEach((imgInfo) => {
+        imgInfo.rate = imgInfo.webformatWidth / imgInfo.webformatHeight
+        let imgWidthBasic = imgInfo.rate * basicHeight
+        console.log(imgWidthBasic)
+        if (rowTotalWidth + imgWidthBasic <= asideWidth) {
+            rowTotalWidth += imgWidthBasic
+            imgArray.push(imgInfo)
+        }else {
+            let figureHeight = asideWidth/rowTotalWidth * basicHeight
+            console.log(imgArray)
+            render(figureHeight ,imgArray)
+            imgArray = []
+            imgArray.push(imgInfo)
+            rowTotalWidth = imgWidthBasic
+        }
+    })
+}
+function render(figureHeight ,imgArray){
+    let $aside = $('aside')
+    imgArray.forEach((imgInfo) => {
+        var imgNode = document.createElement('img')
+        imgNode.src = imgInfo.webformatURL
+        imgNode.style.height = figureHeight + 'px'
+        imgNode.style.width = figureHeight * imgInfo.rate + 'px'
+        $aside.append(imgNode)
+    })
 }

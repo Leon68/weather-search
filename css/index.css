@@ -107,7 +107,8 @@ a {
       #container main #week-weather li img {
         width: 100%; }
 #container aside {
-  margin-left: 28vw;
-  border: 1px solid red; }
+  margin-left: 28vw; }
+  #container aside img {
+    padding: 3px; }
 
 /*# sourceMappingURL=index.css.map */
