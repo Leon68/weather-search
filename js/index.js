@@ -58,6 +58,7 @@ function inpCity(){
 function ajaxImages(){
     let $inpCity = $('#inp-city')
     let $inpCityVal = $inpCity.val() ? $inpCity.val() : 'city'
+    console.log($inpCityVal)
     $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:10`)
         .done(caterLayout)
 }
@@ -72,6 +73,7 @@ function caterLayout(data){
     let basicHeight = 200
     let imgArray = []
     let rowTotalWidth = 0
+    $aside.html('')
     console.log(asideWidth)
     data.hits.forEach((imgInfo) => {
         imgInfo.rate = imgInfo.webformatWidth / imgInfo.webformatHeight
@@ -100,3 +102,6 @@ function render(figureHeight ,imgArray){
         $aside.append(imgNode)
     })
 }
+$(window).on('resize',function(){
+    ajaxImages()
+})
