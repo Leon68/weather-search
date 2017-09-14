@@ -17,7 +17,7 @@ a {
   justify-content: space-between;
   height: 940px;
   width: 540px;
-  position: absolute;
+  position: fixed;
   margin-top: 6px;
   border-radius: 6px;
   background-image: linear-gradient(to bottom, rgba(255, 244, 253, 0.65), rgba(85, 73, 249, 0.16)), url("../images/weather.jpg");
@@ -109,6 +109,6 @@ a {
 #container aside {
   margin-left: 542px; }
   #container aside img {
-    padding: 3px; }
+    padding: 2px; }
 
 /*# sourceMappingURL=index.css.map */

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>木桶布局懒加载</title>
+    <style>
+        body,
+        div,
+        figure {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .clearfix::after {
+            content:'';
+            display: block;
+            clear: both;
+        }
+        .layout .search {
+            width: 800px;
+            margin: 0 auto;
+        }
+        .search input {
+            padding-left: 10px;
+            margin: 100px 0;
+            height: 30px;
+            width: 796px;
+            font-size: 16px;
+            outline: none;
+        }
+        .img-preview {
+            margin: 0 auto;
+        }
+        .img-preview div {
+            padding: 5px;
+            float: left;
+            cursor: pointer;
+
+        }
+        .img-preview div img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2), 0 4px 10px 0 rgba(0, 0, 0, .18);
+        }
+
+        .layout .node {
+            background-color: #ccc;
+            font-size: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #000;
+        }
+        .img-preview.hover div:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <div class="search">
+        <input type="text" name="search" value="" placeholder = "search...">
+    </div>
+    <div class="img-preview clearfix">
+        <!-- <figure class="item">
+            <img src="" alt="">
+        </figure> -->
+    </div>
+    <div class="node">loading...</div>
+</div>
+<script src = 'http://apps.bdimg.com/libs/jquery/1.9.1/jquery.js'></script>
+<script>
+    function Barrel(city){
+        this.city = city
+        this.isDataArrive = true; // 数据加载完成
+        this.isover = false;      // 还有没结束
+        this.$node = $(".node");  // 可视区最下面的节点
+        this.perPage = 20;        // 一页要多少张图片
+        this.pageIndex = 1;       // 页数
+        this.$imgPreviewNode = $(".img-preview"); //
+        this.$imgPreviewWidth = this.$imgPreviewNode.width();
+        this.imgFixedHeight = 200;  // 图片固定宽度
+        this.checkData();
+        this.mouse();
+    };
+    Barrel.prototype = {
+        checkData: function() {
+            if( this.isPageBottom(this.$node) && !this.isover && this.isDataArrive ){
+                this.getData();
+            };
+        },
+        getData: function() {
+            var _this = this;
+            if(!_this.isDataArrive){
+                return;
+            };
+            $.ajax({
+                url: 'https://pixabay.com/api/',
+                type: 'get',
+                data: {
+                    key: '6307267-ecd68ad98ea788f84ddf8b29b',
+                    p: _this.city,
+                    image_type: 'photo',
+                    per_page: _this.perPage,
+                    page: _this.pageIndex
+                },
+                dataType: 'jsonp',
+                jsonp: 'callback',
+                success: function onSuccess(ret) {
+                    _this.isDataArrive = true;
+                    if(ret && ret.total && ret.totalHits){
+                        _this.pageIndex++;
+                        _this.render(ret.hits);
+                        _this.scroll();
+                    };
+                },
+                error: function onError() {
+                    alert('后台奔溃了');
+                }
+            });
+            _this.isDataArrive = false;
+        },
+        render: function(data) {
+            var _this = this;
+            var imgFixedHeight = _this.imgFixedHeight; //图片固定高度
+            var rowTotalWidth = 0;    // 一行总宽度
+            var imgPreviewWidth = _this.$imgPreviewWidth; // layout 节点的宽度
+            var rowList = [];
+            if(data.length === 0){
+                this.isover = true;
+                this.$node.text("没有数据了");
+            };
+            data.forEach(function(imgInfo){
+                imgInfo.newHeight = imgFixedHeight;
+                imgInfo.newWidth = (imgInfo.webformatWidth / imgInfo.webformatHeight) * imgFixedHeight;
+                if(imgInfo.newWidth + rowTotalWidth > imgPreviewWidth) {
+
+                    _this.layout(rowList, rowTotalWidth);
+                    rowList = [imgInfo];
+                    rowTotalWidth = imgInfo.newWidth;
+                }else{
+                    rowList.push(imgInfo);
+                    rowTotalWidth += imgInfo.newWidth;
+                }
+            });
+
+            _this.layout(rowList, rowTotalWidth);
+            rowList = [];
+            rowTotalWidth = 0;
+        },
+        layout: function(list, rowTotalWidth) {
+            console.log(list);
+            var _this = this;
+            var imgFixedHeight = _this.imgFixedHeight; //图片固定高度
+            var imgPreviewWidth = _this.$imgPreviewWidth; // layout 节点的宽度
+            list.forEach(function(imgInfo){
+                var divNode = document.createElement('div');
+                var imgNode = document.createElement('img');
+                var $divNode = $(divNode);
+                var $imgNode = $(imgNode);
+                imgNode.src = imgInfo.webformatURL;
+                $divNode.append($imgNode);
+                $divNode.css({
+                    width: Math.floor((imgInfo.webformatWidth/imgInfo.webformatHeight)*((imgPreviewWidth / rowTotalWidth) * imgFixedHeight)),
+                    height: Math.floor((imgPreviewWidth / rowTotalWidth) * imgFixedHeight)
+                });
+                _this.$imgPreviewNode.append($divNode);
+            });
+        },
+        scroll: function(){
+            var clock; //延时
+            var _this = this;
+            $(window).on('scroll', function(){
+                if(clock){
+                    clearTimeout();
+                }
+
+                clock = setTimeout(function(){
+                    _this.checkData();
+                }, 300);
+            })
+        },
+        isPageBottom: function($node) {
+            var $window = $(window);
+            var scrollTop = $window.scrollTop(); // 滑动高度
+            var windowHeight = $window.height(); // 窗口高度
+            var nodeOffset = $node.offset().top; // 节点位置
+            if( nodeOffset < windowHeight + scrollTop && nodeOffset > scrollTop) {
+                return true;
+            };
+            return false;
+        },
+        mouse: function(){
+            this.$imgPreviewNode.mouseenter('div',function(){
+                $(this).addClass('hover');
+            });
+            this.$imgPreviewNode.mouseleave('div',function(){
+                $(this).removeClass('hover');
+            });
+        }
+    };
+    var v = new Barrel('yellow');
+
+</script>
+
+</body>
+</html>

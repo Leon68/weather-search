@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        aside {
+            width: 1200px;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="inp-city">
+<aside id="img-ct"></aside>
+<script>
+    function Barrel($ct,$inp) {
+        this.$inpCityVal = $inp.val() ? $inp.val() : 'city'
+        this.$aside = $ct
+        this.basicHeight = 200
+        // this.ajaxImages()
+        console.log(this.$aside.width())
+    }
+
+    Barrel.prototype = {
+        ajaxImages: function(){
+            console.log('ajaxImages')
+            console.log(this)
+            var _this = this
+            $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${this.$inpCityVal}&image_type=photo&per_page=40`)
+                .done(function(data){_this.render(data)})
+        },
+        render: function(data) {
+            console.log('render')
+            console.log(this.$aside.width())
+            console.log(data)
+            console.log(this)
+            // let _this = this
+            let imgArray = []
+            let rowTotalWidth = 0
+            let asideWidth = this.$aside.width()
+            data.hits.forEach(imgInfo => {
+                imgInfo.rate = imgInfo.webformatWidth / imgInfo.webformatHeight
+                let imgWidthBasic = imgInfo.rate * this.basicHeight
+                if (rowTotalWidth + imgWidthBasic <= asideWidth) {
+                    rowTotalWidth += imgWidthBasic
+                    imgArray.push(imgInfo)
+                } else {
+                    let figureHeight = (asideWidth / rowTotalWidth) * this.basicHeight
+                    this.layout(figureHeight, imgArray)
+                    imgArray = []
+                    imgArray.push(imgInfo)
+                    rowTotalWidth = imgWidthBasic
+                }
+            })
+        },
+        layout: function(figureHeight, imgArray) {
+            console.log('layout')
+            console.log(this.$aside.width())
+            let $imgFigure = $('<figure></figure>')
+            imgArray.forEach((imgInfo) => {
+                let $img = $('<img>')
+                $img.attr('src', imgInfo.webformatURL)
+                $img.height(figureHeight + 'px')
+//                $img.width(figureHeight * imgInfo.rate + 'px')
+                $imgFigure.append($img)
+                // var imgNode = document.createElement('img')
+                // imgNode.src = imgInfo.webformatURL
+                // imgNode.style.height = figureHeight + 'px'
+                // imgNode.style.width = figureHeight * imgInfo.rate + 'px'
+                // $aside.append(imgNode)
+            })
+            console.log('------')
+            console.log(this.$aside.width())
+            this.$aside.append($imgFigure)
+            console.log($imgFigure.width())
+            console.log(this.$aside.width())
+            console.log('*********')
+
+        }
+    }
+    // new Barrel($('#img-ct'),$('#inp-city'))
+    let barrel = new Barrel($('#img-ct'),$('#inp-city'))
+    barrel.ajaxImages()
+
+    $(window).on('resize', function () {
+        barrel.ajaxImages()
+    })
+</script>
+</body>
+</html>
