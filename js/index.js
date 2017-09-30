@@ -1,5 +1,5 @@
 function ajaxWeather(){
-    $.get('//weixin.jirengu.com/weather')
+    $.get('https://weixin.jirengu.com/weather')
         .done(weather).fail(() => {
         alert('数据请求错误')
     })
@@ -18,7 +18,7 @@ function weather(data){
     let $todayImg = $('#today-weather img')
     let $suggestion = $('#sugestion')
     var $city = $('#city')
-    let codeImg = `//weixin.jirengu.com/images/weather/code/${data.weather[0].now.code}.png`
+    let codeImg = `https://weixin.jirengu.com/images/weather/code/${data.weather[0].now.code}.png`
     let $weekWeather = $('#week-weather')
     let time = new Date()
     $city.text(data.weather[0].city_name + time.toLocaleTimeString())
@@ -31,7 +31,7 @@ function weather(data){
     $todayImg.attr('src',codeImg)
     $weekWeather.html('')
     for (let i = 0;i< 6 ;i++){
-        let weekCodeImg = `//weixin.jirengu.com/images/weather/code/${data.weather[0].future[i].code1}.png`
+        let weekCodeImg = `https://weixin.jirengu.com/images/weather/code/${data.weather[0].future[i].code1}.png`
         $weekWeather.html($weekWeather.html() + `<li><img src=${weekCodeImg}><p>${data.weather[0].future[i].text}${data.weather[0].future[i].low}°~${data.weather[0].future[i].high}°</p><p>${data.weather[0].future[i].day}${data.weather[0].future[i].date}</p></li>`)
     }
 }
@@ -40,10 +40,10 @@ function inpCity(){
     $inpCity.on('keypress',function(event){
         if(event.keyCode == '13'){
             ajaxImages()
-            $.get(`//weixin.jirengu.com/weather/cityid?location=${$inpCity.val()}`)
+            $.get(`https://weixin.jirengu.com/weather/cityid?location=${$inpCity.val()}`)
                 .done((id) => {
                     console.log(id)
-                    $.get(`//weixin.jirengu.com/weather/now?cityid=${id.results[0].id}`)
+                    $.get(`https://weixin.jirengu.com/weather/now?cityid=${id.results[0].id}`)
                         .done((data) => {
                             $inpCity.val('')
                             weather(data)
@@ -56,19 +56,16 @@ function inpCity(){
 }
 
 function ajaxImages(){
+    console.log(2)
     let $inpCity = $('#inp-city')
     let $inpCityVal = $inpCity.val() ? $inpCity.val() : 'city'
-    $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page:10`)
+    $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${$inpCityVal}&image_type=photo&per_page=40`)
         .done(caterLayout)
 }
 
-ajaxWeather()
-ajaxImages()
-inpCity()
-caterLayout()
 function caterLayout(data){
     let $aside = $('aside')
-    let asideWidth = $aside.width()
+    let asideWidth = $aside.width()-20
     let basicHeight = 200
     let imgArray = []
     let rowTotalWidth = 0
@@ -100,3 +97,7 @@ function render(figureHeight ,imgArray){
         $aside.append(imgNode)
     })
 }
+ajaxWeather()
+ajaxImages()
+inpCity()
+$(window).resize(ajaxImages)
