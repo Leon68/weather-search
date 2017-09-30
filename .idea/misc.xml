@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
+=======
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+>>>>>>> 0582cdaea80b0c6c829a9654573ae5c3572e2cd6
   </component>
 </project>

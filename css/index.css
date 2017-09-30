@@ -15,8 +15,8 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 920px;
-  width: 28%;
+  height: 940px;
+  width: 540px;
   position: fixed;
   margin-top: 6px;
   border-radius: 6px;
