@@ -72,7 +72,7 @@ Barrel.prototype = {
         var _this = this
         $.get(`https://pixabay.com/api/?key=6282825-2a9cefbe1dbed27ba005a2747&q=${this.$inpCityVal}&image_type=photo&per_page=40`)
         .done(function(data){
-          if(data.hits.length === 1){return}
+          if(data.hits.length < 10){return}
           _this.$ct.html('')
           _this.render(data)})
     },
